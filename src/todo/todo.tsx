@@ -1,7 +1,7 @@
-import React from "react";
+import React from 'react';
 
-function todo() {
-  return <div>todo</div>;
+function Todo() {
+  return <div>Todo</div>;
 }
 
-export default todo;
+export default Todo;

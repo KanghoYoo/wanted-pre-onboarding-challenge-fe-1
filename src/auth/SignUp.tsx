@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Background, Button, Form, H1, Label, Main } from "./SignUpStyles";
 import useInput from "../hooks/useInput";
@@ -24,7 +24,7 @@ function SignUp() {
       setUserPassword(e.target.value);
       setMismatchError(e.target.value !== userPasswordConfirm);
     },
-    [userPasswordConfirm]
+    [setUserPassword, userPasswordConfirm]
   );
 
   const onChangeUserPasswordConfirm = useCallback(
@@ -32,13 +32,13 @@ function SignUp() {
       setUserPasswordConfirm(e.target.value);
       setMismatchError(e.target.value !== userPassword);
     },
-    [userPassword]
+    [setUserPasswordConfirm, userPassword]
   );
 
   const onSubmit = useCallback(
     (e: any) => {
       e.preventDefault();
-      console.log(userId);
+
       !EMAIL_REGEX.test(userId)
         ? setErrorText("이메일 형식으로 아이디를 입력해주세요.")
         : !PASSWORDS_REGEX.test(userPassword)
@@ -64,13 +64,18 @@ function SignUp() {
     },
     [
       userId,
-      userPassword,
-      setErrorText,
-      mismatchError,
       EMAIL_REGEX,
       PASSWORDS_REGEX,
+      userPassword,
+      mismatchError,
+      navigate,
     ]
   );
+
+  useEffect(() => {
+    localStorage.getItem("token") && navigate("/todo");
+  }, [navigate]);
+
   return (
     <Background>
       <Main>

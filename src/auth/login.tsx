@@ -1,6 +1,6 @@
 import useInput from "../hooks/useInput";
 import axios from "axios";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Background, Button, Form, H1, Label, Main } from "./LoginStyles";
 
@@ -20,7 +20,7 @@ function Login() {
   const onSubmit = useCallback(
     (e: any) => {
       e.preventDefault();
-      console.log(userId);
+
       !EMAIL_REGEX.test(userId)
         ? setErrorText("이메일 형식으로 아이디를 입력해주세요.")
         : !PASSWORDS_REGEX.test(userPassword)
@@ -34,6 +34,8 @@ function Login() {
                 password: userPassword,
               })
               .then((response) => {
+                const accessToken = response.data.token;
+                accessToken && localStorage.setItem("token", accessToken);
                 window.alert(response.data.message);
                 navigate("/todo");
               })
@@ -42,8 +44,12 @@ function Login() {
               });
           })();
     },
-    [userId, userPassword, setErrorText, EMAIL_REGEX, PASSWORDS_REGEX]
+    [userId, EMAIL_REGEX, PASSWORDS_REGEX, userPassword, navigate]
   );
+
+  useEffect(() => {
+    localStorage.getItem("token") && navigate("/todo");
+  }, [navigate]);
 
   return (
     <Background>

@@ -55,12 +55,10 @@ function SignUp() {
               })
               .then((response) => {
                 window.alert(response.data.message);
+                navigate("/login");
               })
               .catch((error) => {
                 console.log(error.response.data);
-              })
-              .then(() => {
-                navigate("/login");
               });
           })();
     },

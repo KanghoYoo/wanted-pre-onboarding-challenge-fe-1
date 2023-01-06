@@ -14,6 +14,10 @@ export const Li = styled.li`
   padding: 10px 5px;
   border-bottom: 1px solid grey;
   font-size: 18px;
+  & input:checked + label {
+    text-decoration: line-through;
+    color: gray;
+  }
 `;
 
 export const DetailWrapper = styled.div`

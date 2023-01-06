@@ -28,8 +28,8 @@ function TodoListItem({
     <>
       <Li id={id}>
         <div>
-          <input type="checkbox" id="title"></input>
-          <label htmlFor="title">{todoItem.title}</label>
+          <input type="checkbox" id={`title${id}`}></input>
+          <label htmlFor={`title${id}`}>{todoItem.title}</label>
         </div>
         <div>
           <button onClick={onClickCloseDetail}>상세보기</button>

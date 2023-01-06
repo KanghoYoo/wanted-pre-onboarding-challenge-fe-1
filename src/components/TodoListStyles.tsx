@@ -4,7 +4,7 @@ export const Ul = styled.ul`
   width: 100%;
   height: 590px;
   max-height: 590px;
-  overflow: scroll;
+  overflow-y: scroll;
 `;
 
 export const Li = styled.li`

@@ -22,6 +22,7 @@ export const ModalContainer = styled.div`
   width: 500px;
   height: 200px;
   background-color: #ffffff;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
   & > p {
     border-radius: 12px 12px 0px 0px;
     padding: 10px 0px;

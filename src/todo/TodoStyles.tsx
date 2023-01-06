@@ -48,6 +48,7 @@ export const Main = styled.main`
   background-color: white;
   width: 400px;
   height: 700px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
 `;
 
 export const H2 = styled.h2`

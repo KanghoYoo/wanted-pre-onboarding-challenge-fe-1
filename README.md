@@ -24,6 +24,20 @@
 
   - [x] 어떤 경우든 토큰이 유효하지 않다면 사용자에게 알리고 로그인 페이지로 리다이렉트 시켜주세요
 
+---
+
+### 구현화면
+
+#### 회원가입
+
+![ezgif.com-gif-maker (3)](../../GitHubPage/KanghoYoo.github.io/assets/img/postingImg/ezgif.com-gif-maker (3).gif)
+
+#### 로그인
+
+![ezgif.com-gif-maker (9)](../../GitHubPage/KanghoYoo.github.io/assets/img/postingImg/ezgif.com-gif-maker (9).gif)
+
+
+
 ## Assignment 2 - Todo List
 
 - Todo List API를 호출하여 Todo List CRUD 기능을 구현해주세요
@@ -48,4 +62,24 @@
 
   - [x] 수정되는 Todo의 내용이 목록에서도 실시간으로 반영되어야 합니다
 
-#### 
+### 구현화면
+
+#### Todo-추가하기
+
+![ezgif.com-gif-maker (10)](../../GitHubPage/KanghoYoo.github.io/assets/img/postingImg/ezgif.com-gif-maker (10).gif)
+
+#### Todo-수정하기
+
+![ezgif.com-gif-maker (12)](../../GitHubPage/KanghoYoo.github.io/assets/img/postingImg/ezgif.com-gif-maker (12).gif)
+
+#### Todo-상세페이지
+
+![ezgif.com-gif-maker (11)](../../GitHubPage/KanghoYoo.github.io/assets/img/postingImg/ezgif.com-gif-maker (11).gif)
+
+#### Todo-삭제하기
+
+![ezgif.com-gif-maker (13)](../../GitHubPage/KanghoYoo.github.io/assets/img/postingImg/ezgif.com-gif-maker (13).gif)
+
+## 사용 라이브러리
+
+- yarn, typescript, react-router-dom, axios, styled-components

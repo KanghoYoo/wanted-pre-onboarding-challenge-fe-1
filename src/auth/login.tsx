@@ -1,25 +1,25 @@
 import useInput from "../hooks/useInput";
-import axios from "axios";
 import React, { useCallback, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Background, Button, Form, H1, Label, Main } from "./LoginStyles";
+import { signIn } from "../apis/AuthAPI";
 
 function Login() {
   const [userId, onChangeUserId] = useInput("");
   const [userPassword, onChangeUserPassword] = useInput("");
-  const [errorText, setErrorText] = useState("");
+  const [errorText, setErrorText] = useState<string>("");
 
   const navigate = useNavigate();
 
-  const EMAIL_REGEX =
-    /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
-  // 영문, 숫자, 특수문자 혼합 8-20자리 이내 비밀번호
-  const PASSWORDS_REGEX =
-    /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,20}$/;
-
   const onSubmit = useCallback(
-    (e: any) => {
+    (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
+
+      const EMAIL_REGEX =
+        /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+      // 영문, 숫자, 특수문자 혼합 8-20자리 이내 비밀번호
+      const PASSWORDS_REGEX =
+        /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,20}$/;
 
       !EMAIL_REGEX.test(userId)
         ? setErrorText("이메일 형식으로 아이디를 입력해주세요.")
@@ -28,11 +28,7 @@ function Login() {
             "8자이상, 영문, 특수기호를 포함한 비밀번호를 입력해주세요."
           )
         : (function () {
-            axios
-              .post(`http://localhost:8080/users/login`, {
-                email: userId,
-                password: userPassword,
-              })
+            signIn(userId, userPassword)
               .then((response) => {
                 const accessToken = response.data.token;
                 accessToken && localStorage.setItem("token", accessToken);
@@ -44,12 +40,12 @@ function Login() {
               });
           })();
     },
-    [userId, EMAIL_REGEX, PASSWORDS_REGEX, userPassword, navigate]
+    [userId, userPassword]
   );
 
   useEffect(() => {
     localStorage.getItem("token") && navigate("/todo");
-  }, [navigate]);
+  }, []);
 
   return (
     <Background>

@@ -3,7 +3,7 @@ import { useState, useCallback } from "react";
 const useInput = (initialValue: any) => {
   const [value, setValue] = useState(initialValue);
 
-  const onChange = useCallback((e: any) => {
+  const onChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value);
   }, []);
 

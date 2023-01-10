@@ -4,6 +4,12 @@ import { useNavigate } from "react-router";
 import { Background, AddButton, H2, Main, Header } from "./TodoStyles";
 import Modal from "../components/Modal";
 import axios from "axios";
+import {
+  createTodos,
+  deleteTodos,
+  getTodos,
+  updateTodos,
+} from "../apis/TodoAPI";
 
 interface TodosType {
   title: string;
@@ -29,73 +35,36 @@ function Todo() {
     }
   };
 
-  const onCreate = (
-    title: any,
-    content: any,
-    setTitle: any,
-    setContent: any
-  ) => {
-    title !== "" &&
-      content !== "" &&
-      axios
-        .post(
-          `http://localhost:8080/todos`,
-          { title: title, content: content },
-          {
-            headers: {
-              Authorization: `${localStorage.getItem("token")}`,
-            },
-          }
-        )
-        .then((response) => {
-          setTodos([...todos, response.data.data]);
-          setTitle("");
-          setContent("");
-          setIsClickCreateModal(false);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-  };
+  const onCreate = useCallback(
+    (title: string, content: string, setTitle: any, setContent: any) => {
+      title !== "" &&
+        content !== "" &&
+        createTodos(title, content)
+          .then((response) => {
+            setTodos(response.data.data);
+            setTitle("");
+            setContent("");
+            setIsClickCreateModal(false);
+          })
+          .catch((err) => {
+            console.log(err.response);
+          });
+    },
+    []
+  );
 
   const onModify = useCallback(
     (
-      title: any,
-      content: any,
+      title: string,
+      content: string,
       setTitle: any,
       setContent: any,
-      selectId: string,
+      id: string,
       setSelectId: any
     ) => {
-      console.log("수정");
-      axios
-        .put(
-          `http://localhost:8080/todos/${selectId}`,
-          {
-            title: title,
-            content: content,
-          },
-          {
-            headers: {
-              Authorization: `${localStorage.getItem("token")}`,
-            },
-          }
-        )
+      updateTodos(id, title, content)
         .then((response) => {
-          axios
-            .get(`http://localhost:8080/todos`, {
-              headers: {
-                Authorization: `${localStorage.getItem("token")}`,
-              },
-            })
-            .then((response) => {
-              setTodos(response.data.data);
-            })
-            .catch((err) => {
-              console.log(err.response);
-            });
-
-          console.log(response);
+          setTodos(response.data.data);
           setTitle("");
           setContent("");
           setSelectId("");
@@ -108,32 +77,22 @@ function Todo() {
     []
   );
 
-  const onRemove = (id: any) => {
-    axios
-      .delete(`http://localhost:8080/todos/${id}`, {
-        headers: {
-          Authorization: `${localStorage.getItem("token")}`,
-        },
-      })
+  const onRemove = useCallback((id: string) => {
+    deleteTodos(id)
       .then((response) => {
-        setTodos(todos.filter((todoItem: { id: any }) => todoItem.id !== id));
+        setTodos(response.data.data);
       })
       .catch((err) => {
         console.log(err.response);
       });
-  };
+  }, []);
 
   if (localStorage.getItem("token") === null) {
     navigate("/login");
   }
 
   useEffect(() => {
-    axios
-      .get(`http://localhost:8080/todos`, {
-        headers: {
-          Authorization: `${localStorage.getItem("token")}`,
-        },
-      })
+    getTodos()
       .then((response) => {
         setTodos(response.data.data);
       })

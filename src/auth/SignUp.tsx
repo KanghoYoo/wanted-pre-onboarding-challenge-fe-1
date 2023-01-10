@@ -2,25 +2,19 @@ import React, { useCallback, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Background, Button, Form, H1, Label, Main } from "./SignUpStyles";
 import useInput from "../hooks/useInput";
-import axios from "axios";
+import { signUp } from "../apis/AuthAPI";
 
 function SignUp() {
   const [userId, onChangeUserId] = useInput("");
   const [userPassword, , setUserPassword] = useInput("");
   const [userPasswordConfirm, , setUserPasswordConfirm] = useInput("");
-  const [mismatchError, setMismatchError] = useState(false);
-  const [errorText, setErrorText] = useState("");
-
-  const EMAIL_REGEX =
-    /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
-  // 영문, 숫자, 특수문자 혼합 8-20자리 이내 비밀번호
-  const PASSWORDS_REGEX =
-    /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,20}$/;
+  const [mismatchError, setMismatchError] = useState<boolean>(false);
+  const [errorText, setErrorText] = useState<string>("");
 
   const navigate = useNavigate();
 
   const onChangeUserPassword = useCallback(
-    (e: any) => {
+    (e: React.ChangeEvent<HTMLInputElement>) => {
       setUserPassword(e.target.value);
       setMismatchError(e.target.value !== userPasswordConfirm);
     },
@@ -28,7 +22,7 @@ function SignUp() {
   );
 
   const onChangeUserPasswordConfirm = useCallback(
-    (e: any) => {
+    (e: React.ChangeEvent<HTMLInputElement>) => {
       setUserPasswordConfirm(e.target.value);
       setMismatchError(e.target.value !== userPassword);
     },
@@ -36,8 +30,14 @@ function SignUp() {
   );
 
   const onSubmit = useCallback(
-    (e: any) => {
+    (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
+
+      const EMAIL_REGEX =
+        /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+      // 영문, 숫자, 특수문자 혼합 8-20자리 이내 비밀번호
+      const PASSWORDS_REGEX =
+        /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,20}$/;
 
       !EMAIL_REGEX.test(userId)
         ? setErrorText("이메일 형식으로 아이디를 입력해주세요.")
@@ -48,11 +48,7 @@ function SignUp() {
         : mismatchError
         ? setErrorText("비밀번호가 일치하지 않습니다.")
         : (function () {
-            axios
-              .post(`http://localhost:8080/users/create`, {
-                email: userId,
-                password: userPassword,
-              })
+            signUp(userId, userPassword)
               .then((response) => {
                 window.alert(response.data.message);
                 navigate("/login");
@@ -62,14 +58,7 @@ function SignUp() {
               });
           })();
     },
-    [
-      userId,
-      EMAIL_REGEX,
-      PASSWORDS_REGEX,
-      userPassword,
-      mismatchError,
-      navigate,
-    ]
+    [userId, userPassword, mismatchError, navigate]
   );
 
   useEffect(() => {

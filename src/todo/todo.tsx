@@ -3,31 +3,22 @@ import React, { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { Background, AddButton, H2, Main, Header } from "./TodoStyles";
 import Modal from "../components/Modal";
-import axios from "axios";
 import {
   createTodos,
   deleteTodos,
   getTodos,
   updateTodos,
 } from "../apis/TodoAPI";
-
-interface TodosType {
-  title: string;
-  content: string;
-  id: string;
-  createdAt: string;
-  updatedAt: string;
-}
+import { TodosType } from "./TodoInterface";
 
 function Todo() {
   const [todos, setTodos] = useState<TodosType[]>([]);
-  const [isClickCreateModal, setIsClickCreateModal] = useState(false);
-  const [isClickModifyModal, setIsClickModifyModal] = useState(false);
-  const [isClickDetail, setIsClickDetail] = useState(false);
-  const [selectId, setSelectId] = useState("");
+  const [isClickCreateModal, setIsClickCreateModal] = useState<boolean>(false);
+  const [isClickModifyModal, setIsClickModifyModal] = useState<boolean>(false);
+  const [selectId, setSelectId] = useState<string>("");
   const navigate = useNavigate();
 
-  const onClickLogout = () => {
+  const onClickLogout = (): void => {
     if (window.confirm("로그아웃 하시겠습니까?")) {
       alert("로그아웃되었습니다.");
       localStorage.removeItem("token");
@@ -35,38 +26,24 @@ function Todo() {
     }
   };
 
-  const onCreate = useCallback(
-    (title: string, content: string, setTitle: any, setContent: any) => {
-      title !== "" &&
-        content !== "" &&
-        createTodos(title, content)
-          .then((response) => {
-            setTodos(response.data.data);
-            setTitle("");
-            setContent("");
-            setIsClickCreateModal(false);
-          })
-          .catch((err) => {
-            console.log(err.response);
-          });
-    },
-    []
-  );
+  const onCreate = useCallback((title: string, content: string): void => {
+    title !== "" &&
+      content !== "" &&
+      createTodos(title, content)
+        .then((response) => {
+          setTodos(response.data.data);
+          setIsClickCreateModal(false);
+        })
+        .catch((err) => {
+          console.log(err.response);
+        });
+  }, []);
 
   const onModify = useCallback(
-    (
-      title: string,
-      content: string,
-      setTitle: any,
-      setContent: any,
-      id: string,
-      setSelectId: any
-    ) => {
+    (title: string, content: string, id: string): void => {
       updateTodos(id, title, content)
         .then((response) => {
           setTodos(response.data.data);
-          setTitle("");
-          setContent("");
           setSelectId("");
           setIsClickModifyModal(false);
         })
@@ -77,8 +54,18 @@ function Todo() {
     []
   );
 
-  const onRemove = useCallback((id: string) => {
+  const onRemove = useCallback((id: string): void => {
     deleteTodos(id)
+      .then((response) => {
+        setTodos(response.data.data);
+      })
+      .catch((err) => {
+        console.log(err.response);
+      });
+  }, []);
+
+  useEffect((): void => {
+    getTodos()
       .then((response) => {
         setTodos(response.data.data);
       })
@@ -91,30 +78,17 @@ function Todo() {
     navigate("/login");
   }
 
-  useEffect(() => {
-    getTodos()
-      .then((response) => {
-        setTodos(response.data.data);
-      })
-      .catch((err) => {
-        console.log(err.response);
-      });
-  }, []);
-
   return (
     <Background>
       {(isClickCreateModal || isClickModifyModal) && (
         <Modal
           setIsClickCreateModal={setIsClickCreateModal}
-          setTodos={setTodos}
-          todos={todos}
           onCreate={onCreate}
           setIsClickModifyModal={setIsClickModifyModal}
           onModify={onModify}
           isClickCreateModal={isClickCreateModal}
           isClickModifyModal={isClickModifyModal}
           selectId={selectId}
-          setSelectId={setSelectId}
         ></Modal>
       )}
       <Header>
@@ -125,8 +99,6 @@ function Todo() {
         <H2>TodoList</H2>
         <TodoList
           todos={todos}
-          isClickDetail={isClickDetail}
-          setIsClickDetail={setIsClickDetail}
           onRemove={onRemove}
           setIsClickModifyModal={setIsClickModifyModal}
           setSelectId={setSelectId}

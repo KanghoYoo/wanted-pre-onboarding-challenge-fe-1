@@ -12,10 +12,11 @@ function Login() {
   const navigate = useNavigate();
 
   const onSubmit = useCallback(
-    (e: React.FormEvent<HTMLFormElement>) => {
+    (e: React.FormEvent<HTMLFormElement>): void => {
       e.preventDefault();
 
       const EMAIL_REGEX =
+        // eslint-disable-next-line no-useless-escape
         /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
       // 영문, 숫자, 특수문자 혼합 8-20자리 이내 비밀번호
       const PASSWORDS_REGEX =
@@ -27,7 +28,7 @@ function Login() {
         ? setErrorText(
             "8자이상, 영문, 특수기호를 포함한 비밀번호를 입력해주세요."
           )
-        : (function () {
+        : (function (): void {
             signIn(userId, userPassword)
               .then((response) => {
                 const accessToken = response.data.token;
@@ -40,12 +41,12 @@ function Login() {
               });
           })();
     },
-    [userId, userPassword]
+    [navigate, userId, userPassword]
   );
 
-  useEffect(() => {
+  useEffect((): void => {
     localStorage.getItem("token") && navigate("/todo");
-  }, []);
+  }, [navigate]);
 
   return (
     <Background>

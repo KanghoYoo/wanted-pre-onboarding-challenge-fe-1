@@ -14,7 +14,7 @@ function SignUp() {
   const navigate = useNavigate();
 
   const onChangeUserPassword = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
+    (e: React.ChangeEvent<HTMLInputElement>): void => {
       setUserPassword(e.target.value);
       setMismatchError(e.target.value !== userPasswordConfirm);
     },
@@ -22,7 +22,7 @@ function SignUp() {
   );
 
   const onChangeUserPasswordConfirm = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
+    (e: React.ChangeEvent<HTMLInputElement>): void => {
       setUserPasswordConfirm(e.target.value);
       setMismatchError(e.target.value !== userPassword);
     },
@@ -30,10 +30,11 @@ function SignUp() {
   );
 
   const onSubmit = useCallback(
-    (e: React.FormEvent<HTMLFormElement>) => {
+    (e: React.FormEvent<HTMLFormElement>): void => {
       e.preventDefault();
 
       const EMAIL_REGEX =
+        // eslint-disable-next-line no-useless-escape
         /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
       // 영문, 숫자, 특수문자 혼합 8-20자리 이내 비밀번호
       const PASSWORDS_REGEX =
@@ -47,7 +48,7 @@ function SignUp() {
           )
         : mismatchError
         ? setErrorText("비밀번호가 일치하지 않습니다.")
-        : (function () {
+        : (function (): void {
             signUp(userId, userPassword)
               .then((response) => {
                 window.alert(response.data.message);
@@ -61,7 +62,7 @@ function SignUp() {
     [userId, userPassword, mismatchError, navigate]
   );
 
-  useEffect(() => {
+  useEffect((): void => {
     localStorage.getItem("token") && navigate("/todo");
   }, [navigate]);
 

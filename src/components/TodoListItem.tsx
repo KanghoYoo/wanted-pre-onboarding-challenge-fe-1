@@ -1,26 +1,21 @@
-import axios from "axios";
 import React, { useState } from "react";
+import { TodoListItemType } from "src/todo/TodoInterface";
 import { DetailWrapper, Li } from "./TodoListStyles";
 
-function TodoListItem({
-  id,
-  todos,
-  todoItem,
-  onRemove,
-  setIsClickModifyModal,
-  setSelectId,
-}: any) {
-  const [isClickDetail, setIsClickDetail] = useState(false);
+function TodoListItem(props: TodoListItemType): JSX.Element {
+  const { id, todoItem, onRemove, setIsClickModifyModal, setSelectId } = props;
+  const [isClickDetail, setIsClickDetail] = useState<boolean>(false);
 
-  const onClickCloseDetail = () => {
+  const onClickCloseDetail = (): void => {
     isClickDetail ? setIsClickDetail(false) : setIsClickDetail(true);
   };
 
-  const onClickRemoveButton = (id: string) => {
+  const onClickRemoveButton = (id: string): void => {
     onRemove(id);
+    setIsClickDetail(false);
   };
 
-  const onClickModifyButton = () => {
+  const onClickModifyButton = (): void => {
     setSelectId(id);
     setIsClickModifyModal(true);
   };

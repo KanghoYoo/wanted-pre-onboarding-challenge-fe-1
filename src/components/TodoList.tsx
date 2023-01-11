@@ -1,23 +1,19 @@
-import axios from "axios";
 import React from "react";
+import { TodoListProps, TodosType } from "src/todo/TodoInterface";
 import TodoListItem from "./TodoListItem";
-import { DetailWrapper, Li, Ul } from "./TodoListStyles";
+import { Ul } from "./TodoListStyles";
 
-function TodoList({
-  todos,
-  onRemove,
-  setIsClickModifyModal,
-  setSelectId,
-}: any) {
+function TodoList(props: TodoListProps): JSX.Element {
+  const { todos, onRemove, setIsClickModifyModal, setSelectId } = props;
+
   return (
     <Ul>
       {todos &&
-        todos.map((todoItem: any, index: any) => {
+        todos.map((todoItem: TodosType, index: number): JSX.Element => {
           return (
             <TodoListItem
               id={todoItem.id}
               key={index}
-              todos={todos}
               todoItem={todoItem}
               onRemove={onRemove}
               setIsClickModifyModal={setIsClickModifyModal}

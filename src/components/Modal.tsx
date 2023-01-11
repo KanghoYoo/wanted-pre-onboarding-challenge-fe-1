@@ -1,6 +1,5 @@
+import { ModalProps } from "src/todo/TodoInterface";
 import useInput from "../hooks/useInput";
-import axios from "axios";
-import React, { useCallback, useEffect } from "react";
 import {
   ModalBackground,
   ButtonWrapper,
@@ -8,23 +7,20 @@ import {
   ModalContainer,
 } from "./ModalStyles";
 
-const Modal = (props: any) => {
+const Modal = (props: ModalProps): JSX.Element => {
   const {
     setIsClickCreateModal,
-    setTodos,
-    todos,
     onCreate,
     setIsClickModifyModal,
     onModify,
     isClickCreateModal,
     isClickModifyModal,
     selectId,
-    setSelectId,
   } = props;
   const [title, onChangeTitle, setTitle] = useInput("");
   const [content, onChangeContent, setContent] = useInput("");
 
-  const onClickModalClose = (e: any) => {
+  const onClickModalClose = (e: any): void => {
     e.stopPropagation();
     setTitle("");
     setContent("");
@@ -32,12 +28,21 @@ const Modal = (props: any) => {
     isClickModifyModal && setIsClickModifyModal(false);
   };
 
-  const onClickCreate = () => {
-    onCreate(title, content, setTitle, setContent);
+  const onClickButton = (): void => {
+    (isClickCreateModal && onClickCreate()) ||
+      (isClickModifyModal && onClickModify());
   };
 
-  const onClickModify = () => {
-    onModify(title, content, setTitle, setContent, selectId, setSelectId);
+  const onClickCreate = (): void => {
+    onCreate(title, content);
+    setTitle("");
+    setContent("");
+  };
+
+  const onClickModify = (): void => {
+    onModify(title, content, selectId);
+    setTitle("");
+    setContent("");
   };
   return (
     <>
@@ -68,12 +73,7 @@ const Modal = (props: any) => {
           </label>
         </LabelWrapper>
         <ButtonWrapper>
-          <button
-            onClick={
-              (isClickCreateModal && onClickCreate) ||
-              (isClickModifyModal && onClickModify)
-            }
-          >
+          <button onClick={onClickButton}>
             {(isClickCreateModal && "추가") || (isClickModifyModal && "수정")}
           </button>
           <button onClick={onClickModalClose}>취소</button>

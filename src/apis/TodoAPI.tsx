@@ -1,11 +1,12 @@
 import axios from "axios";
 
 const URI = "http://localhost:8080";
+const GET_TOKEN = `${localStorage.getItem("token")}`;
 
 export const getTodos = () =>
   axios.get(`${URI}/todos`, {
     headers: {
-      Authorization: `${localStorage.getItem("token")}`,
+      Authorization: GET_TOKEN,
     },
   });
 
@@ -13,10 +14,10 @@ export const createTodos = (title: string, content: string) =>
   axios
     .post(
       `${URI}/todos`,
-      { title: title, content: content },
+      { title, content },
       {
         headers: {
-          Authorization: `${localStorage.getItem("token")}`,
+          Authorization: GET_TOKEN,
         },
       }
     )
@@ -27,12 +28,12 @@ export const updateTodos = (id: string, title: string, content: string) =>
     .put(
       `${URI}/todos/${id}`,
       {
-        title: title,
-        content: content,
+        title,
+        content,
       },
       {
         headers: {
-          Authorization: `${localStorage.getItem("token")}`,
+          Authorization: GET_TOKEN,
         },
       }
     )
@@ -42,7 +43,7 @@ export const deleteTodos = (id: string) =>
   axios
     .delete(`${URI}/todos/${id}`, {
       headers: {
-        Authorization: `${localStorage.getItem("token")}`,
+        Authorization: GET_TOKEN,
       },
     })
     .then(() => getTodos());

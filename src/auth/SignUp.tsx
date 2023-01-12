@@ -51,7 +51,7 @@ function SignUp() {
         : (function (): void {
             signUp(userId, userPassword)
               .then((response) => {
-                window.alert(response.data.message);
+                window.alert(response?.data.message);
                 navigate("/login");
               })
               .catch((error) => {

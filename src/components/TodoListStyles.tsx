@@ -1,12 +1,5 @@
 import styled from "styled-components";
 
-export const Ul = styled.ul`
-  width: 100%;
-  height: 590px;
-  max-height: 590px;
-  overflow-y: scroll;
-`;
-
 export const Li = styled.li`
   display: flex;
   flex-direction: row;

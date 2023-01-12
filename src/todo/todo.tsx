@@ -1,7 +1,7 @@
 import TodoList from "../components/TodoList";
 import React, { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
-import { Background, AddButton, H2, Main, Header } from "./TodoStyles";
+import { Background, AddButton, H2, Main, Header, Ul } from "./TodoStyles";
 import Modal from "../components/Modal";
 import {
   createTodos,
@@ -97,12 +97,14 @@ function Todo() {
       </Header>
       <Main>
         <H2>TodoList</H2>
-        <TodoList
-          todos={todos}
-          onRemove={onRemove}
-          setIsClickModifyModal={setIsClickModifyModal}
-          setSelectId={setSelectId}
-        />
+        <Ul>
+          <TodoList
+            todos={todos}
+            onRemove={onRemove}
+            setIsClickModifyModal={setIsClickModifyModal}
+            setSelectId={setSelectId}
+          />
+        </Ul>
         <AddButton onClick={() => setIsClickCreateModal(true)}>+</AddButton>
       </Main>
     </Background>

@@ -51,6 +51,13 @@ export const Main = styled.main`
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
 `;
 
+export const Ul = styled.ul`
+  width: 100%;
+  height: 590px;
+  max-height: 590px;
+  overflow-y: scroll;
+`;
+
 export const H2 = styled.h2`
   border-radius: 12px 12px 0px 0px;
   padding: 20px 0px;
